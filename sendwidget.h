@@ -13,6 +13,7 @@ class SendWidget : public QWidget {
   void send(package_t *pkg);
 
  public slots:
+  void clearScreen();
 
  private:
   QVector<QPointF> mPoints;

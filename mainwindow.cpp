@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
   ui->setupUi(this);
   connect(ui->sendWidget, &SendWidget::send, ui->receiveWidget,
           &ReceiveWidget::receive);
+  connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget, &SendWidget::clearScreen);
 }
 
 MainWindow::~MainWindow() { delete ui; }
