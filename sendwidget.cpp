@@ -68,7 +68,7 @@ void SendWidget::resizeEvent(QResizeEvent *e) {
   QWidget::resizeEvent(e);
 }
 
-void SendWidget::clearScreen(){
+void SendWidget::clearScreen() {
   mPoints.clear();
   image.fill(Qt::white);
   updateImage();

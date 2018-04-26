@@ -27,13 +27,15 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     sendwidget.cpp \
-    receivewidget.cpp
+    receivewidget.cpp \
+    worker.cpp
 
 HEADERS += \
         mainwindow.h \
     sendwidget.h \
     package.h \
-    receivewidget.h
+    receivewidget.h \
+    worker.h
 
 FORMS += \
         mainwindow.ui
