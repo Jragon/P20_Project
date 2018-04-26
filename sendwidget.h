@@ -10,7 +10,7 @@ class SendWidget : public QWidget {
   explicit SendWidget(QWidget *parent = nullptr);
 
  signals:
-  void send(package_t *pkg);
+  void send(package_t pkg);
 
  public slots:
   void clearScreen();

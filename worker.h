@@ -13,7 +13,7 @@ class SendWorker : public QObject {
  signals:
 
  public slots:
-  void sendPackage(package_t *pkg);
+  void sendPackage(package_t pkg);
 
  private:
   void writeByte(quint8 byte);

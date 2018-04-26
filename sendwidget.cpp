@@ -48,7 +48,7 @@ void SendWidget::sendImage() {
   QDataStream stream(&pkg.data, QIODevice::WriteOnly);
   stream << image;
 
-  emit send(&pkg);
+  emit send(pkg);
 }
 
 // void SendWidget::addPoint(QPointF point) {

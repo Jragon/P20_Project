@@ -4,16 +4,22 @@
 volatile struct {
   bool txSync;
   bool rxSync;
+  bool cmdSync;
   bool data;
 } rxSim;
 
 SendWorker::SendWorker(QObject *parent) : QObject(parent) {}
 
-void SendWorker::sendPackage(package_t *pkg) {
+void SendWorker::sendPackage(package_t pkg) {
   QThread::currentThread()->usleep(500);
-  rxSim.data = 1;
+  rxSim.cmdSync = 1;
+  writeByte(pkg.cmd);
+  rxSim.cmdSync = 0;
+  writeByte(pkg.data.size());
+  for(int i=0;i<pkg.data.size();i++){
+      writeByte(pkg.data.at(i));
+  }
   qDebug() << "Package Sent: " << rxSim.data;
-  writeByte(5);
 }
 
 void SendWorker::writeByte(quint8 byte) {
@@ -43,7 +49,7 @@ void RecvWorker::loop() {
   rxSim.txSync = false;
 
   while (!exitFlag) {
-    QThread::currentThread()->usleep(1000000);
+//    QThread::currentThread()->usleep(100000);
     qDebug() << "Package received" << readByte();
   }
 }

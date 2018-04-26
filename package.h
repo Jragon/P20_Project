@@ -3,10 +3,11 @@
 
 #include <QByteArray>
 
-struct package_t {
+typedef struct{
   enum Commands { Clear = 0, Resize, Point, Image };
-  int cmd;
+  quint8 cmd;
   QByteArray data;
-};
+} package_t ;
 
+Q_DECLARE_METATYPE(package_t);
 #endif  // PACKAGE_H
