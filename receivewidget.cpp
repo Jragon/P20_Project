@@ -6,10 +6,10 @@
 
 ReceiveWidget::ReceiveWidget(QWidget *parent) : QWidget(parent) {}
 
-void ReceiveWidget::receive(package_t *pkg) {
-  switch (pkg->cmd) {
+void ReceiveWidget::receive(package_t pkg) {
+  switch (pkg.cmd) {
     case package_t::Image: {
-      QDataStream stream(pkg->data);
+      QDataStream stream(pkg.data);
       stream >> image;
       this->update();
       break;

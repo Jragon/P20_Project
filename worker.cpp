@@ -15,11 +15,11 @@ void SendWorker::sendPackage(package_t pkg) {
   rxSim.cmdSync = 1;
   writeByte(pkg.cmd);
   rxSim.cmdSync = 0;
+  writeByte(pkg.data.size() >> 8);
   writeByte(pkg.data.size());
-  for(int i=0;i<pkg.data.size();i++){
-      writeByte(pkg.data.at(i));
+  for (int i = 0; i < pkg.data.size(); i++) {
+    writeByte(pkg.data.at(i));
   }
-  qDebug() << "Package Sent: " << rxSim.data;
 }
 
 void SendWorker::writeByte(quint8 byte) {
@@ -49,8 +49,19 @@ void RecvWorker::loop() {
   rxSim.txSync = false;
 
   while (!exitFlag) {
-//    QThread::currentThread()->usleep(100000);
-    qDebug() << "Package received" << readByte();
+    if (rxSim.cmdSync) {
+      package_t pkg;
+
+      pkg.cmd = readByte();
+
+      int size = readByte() << 8;
+      size |= readByte();
+      for (int i = 0; i < size; i++) {
+        pkg.data.append(readByte());
+      }
+
+      emit received(pkg);
+    }
   }
 }
 

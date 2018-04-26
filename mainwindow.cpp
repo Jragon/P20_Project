@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
   connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget,
           &SendWidget::clearScreen);
 
-  SendWorker *sendWorker = new SendWorker;
+  sendWorker = new SendWorker;
   sendWorker->moveToThread(&sendThread);
 
   connect(ui->sendWidget, &SendWidget::send, sendWorker,
@@ -19,6 +19,9 @@ MainWindow::MainWindow(QWidget *parent)
   recvWorker->moveToThread(&recvThread);
 
   connect(&recvThread, &QThread::started, recvWorker, &RecvWorker::loop);
+  connect(recvWorker, &RecvWorker::received, ui->receiveWidget,
+          &ReceiveWidget::receive);
+
   sendThread.start();
   recvThread.start();
 }

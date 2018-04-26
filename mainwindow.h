@@ -22,6 +22,7 @@ class MainWindow : public QMainWindow {
   Ui::MainWindow *ui;
   QThread sendThread, recvThread;
   RecvWorker *recvWorker;
+  SendWorker *sendWorker;
 };
 
 #endif  // MAINWINDOW_H

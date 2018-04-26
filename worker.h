@@ -25,7 +25,7 @@ class RecvWorker : public QObject {
   explicit RecvWorker(QObject *parent = nullptr);
 
  signals:
-  void received(package_t *pkg);
+  void received(package_t pkg);
 
  public slots:
   void loop();

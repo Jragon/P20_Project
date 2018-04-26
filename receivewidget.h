@@ -12,7 +12,7 @@ class ReceiveWidget : public QWidget {
  signals:
 
  public slots:
-  void receive(package_t *pkg);
+  void receive(package_t pkg);
 
  private:
   QImage image;
