@@ -5,7 +5,10 @@
 #include <QPainter>
 #include <QStyleOption>
 
-SendWidget::SendWidget(QWidget *parent) : QWidget(parent) {}
+SendWidget::SendWidget(QWidget *parent) : QWidget(parent) {
+    pColour = Qt::black;
+    pWidth = 1;
+}
 
 void SendWidget::paintEvent(QPaintEvent *e) {
   QPainter painter(this);
@@ -35,7 +38,7 @@ void SendWidget::mouseReleaseEvent(QMouseEvent *e) {
 
 void SendWidget::updateImage() {
   QPainter painter(&image);
-  painter.setPen(QColor(Qt::black));
+  painter.setPen(QPen(pColour, pWidth));
   painter.setRenderHint(QPainter::Antialiasing);
   painter.drawPolyline(mPoints.data(), mPoints.count());
 
@@ -73,4 +76,37 @@ void SendWidget::clearScreen() {
   image.fill(Qt::white);
   updateImage();
   sendImage();
+}
+
+void SendWidget::penWidth(int width){
+    pWidth = width;
+}
+
+void SendWidget::penColour(int colour){
+    switch (colour) {
+    case 0:
+        pColour = Qt::black;
+        break;
+    case 1:
+        pColour = Qt::red;
+        break;
+    case 2:
+        pColour = Qt::green;
+        break;
+    case 3:
+        pColour = Qt::blue;
+        break;
+    case 4:
+        pColour = Qt::cyan;
+        break;
+    case 5:
+        pColour = Qt::magenta;
+        break;
+    case 6:
+        pColour = Qt::yellow;
+        break;
+    default:
+        pColour = Qt::black;
+        break;
+    }
 }

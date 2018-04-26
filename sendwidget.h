@@ -14,10 +14,14 @@ class SendWidget : public QWidget {
 
  public slots:
   void clearScreen();
+  void penColour(int colour);
+  void penWidth(int width);
 
  private:
   QVector<QPointF> mPoints;
   QImage image;
+  QColor pColour;
+  int pWidth;
 
   void updateImage();
   void sendImage();
