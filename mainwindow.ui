@@ -150,13 +150,6 @@
         </property>
        </widget>
       </item>
-      <item>
-       <widget class="ReceiveWidget" name="receiveWidget" native="true">
-        <property name="styleSheet">
-         <string notr="true">background-color: rgb(255, 255, 255)</string>
-        </property>
-       </widget>
-      </item>
      </layout>
     </item>
    </layout>
@@ -168,12 +161,6 @@
    <class>SendWidget</class>
    <extends>QWidget</extends>
    <header>sendwidget.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ReceiveWidget</class>
-   <extends>QWidget</extends>
-   <header>receivewidget.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

@@ -1,8 +1,11 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QCloseEvent>
+#include <QDesktopWidget>
 #include <QMainWindow>
 #include <QThread>
+#include "receivewidget.h"
 #include "worker.h"
 
 namespace Ui {
@@ -18,8 +21,12 @@ class MainWindow : public QMainWindow {
  signals:
   void deconstructing();
 
+ protected:
+  void closeEvent(QCloseEvent *event);
+
  private:
   Ui::MainWindow *ui;
+  ReceiveWidget *recvWidget;
   QThread sendThread, recvThread;
   RecvWorker *recvWorker;
   SendWorker *sendWorker;

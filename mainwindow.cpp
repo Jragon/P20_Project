@@ -4,12 +4,29 @@
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
-  //  connect(ui->sendWidget, &SendWidget::send, ui->receiveWidget,
-  //          &ReceiveWidget::receive);
+
+  // idk need to work on the actual position of the recv widget
+  // for somereason this->x() doesn't return the x pos of
+  // mainwindow. Maybe it's because mainwindow has been constructed?
+  QSize dSize = QApplication::desktop()->availableGeometry().size();
+  int x = dSize.width() / 2 - this->width();
+  int y = (dSize.height() - this->height()) / 2;
+
+  recvWidget = new ReceiveWidget();
+  recvWidget->setWindowTitle("Receive Window");
+  recvWidget->resize(this->size());
+  recvWidget->setStyleSheet("background-color: rgb(255, 255, 255)");
+  recvWidget->move(x, y);
+  recvWidget->show();
+
   connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget,
           &SendWidget::clearScreen);
-  connect(ui->colourInput, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), ui->sendWidget, &SendWidget::penColour);
-  connect(ui->sizeInput, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), ui->sendWidget, &SendWidget::penWidth);
+  connect(ui->colourInput,
+          static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
+          ui->sendWidget, &SendWidget::penColour);
+  connect(ui->sizeInput,
+          static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged),
+          ui->sendWidget, &SendWidget::penWidth);
 
   sendWorker = new SendWorker;
   sendWorker->moveToThread(&sendThread);
@@ -21,11 +38,14 @@ MainWindow::MainWindow(QWidget *parent)
   recvWorker->moveToThread(&recvThread);
 
   connect(&recvThread, &QThread::started, recvWorker, &RecvWorker::loop);
-  connect(recvWorker, &RecvWorker::received, ui->receiveWidget,
+  connect(recvWorker, &RecvWorker::received, recvWidget,
           &ReceiveWidget::receive);
 
   sendThread.start();
   recvThread.start();
+
+  // send initial white image to set width
+  ui->sendWidget->sendImage();
 }
 
 MainWindow::~MainWindow() {
@@ -34,5 +54,14 @@ MainWindow::~MainWindow() {
   recvThread.wait();
   sendThread.quit();
   sendThread.wait();
+
+  recvWidget->close();
+
   delete ui;
+  delete recvWidget;
+}
+
+void MainWindow::closeEvent(QCloseEvent *event) {
+  recvWidget->hide();
+  event->accept();
 }

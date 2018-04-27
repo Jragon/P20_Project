@@ -1,14 +1,14 @@
 #include "sendwidget.h"
+#include <QColorDialog>
 #include <QDataStream>
 #include <QMouseEvent>
 #include <QPaintEvent>
 #include <QPainter>
 #include <QStyleOption>
-#include <QColorDialog>
 
 SendWidget::SendWidget(QWidget *parent) : QWidget(parent) {
-    pColour = Qt::black;
-    pWidth = 1;
+  pColour = Qt::black;
+  pWidth = 1;
 }
 
 void SendWidget::paintEvent(QPaintEvent *e) {
@@ -39,7 +39,8 @@ void SendWidget::mouseReleaseEvent(QMouseEvent *e) {
 
 void SendWidget::updateImage() {
   QPainter painter(&image);
-  painter.setPen(QPen(pColour, pWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+  painter.setPen(
+      QPen(pColour, pWidth, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
   painter.setRenderHint(QPainter::Antialiasing);
   painter.drawPolyline(mPoints.data(), mPoints.count());
 
@@ -79,38 +80,36 @@ void SendWidget::clearScreen() {
   sendImage();
 }
 
-void SendWidget::penWidth(int width){
-    pWidth = width;
-}
+void SendWidget::penWidth(int width) { pWidth = width; }
 
-void SendWidget::penColour(int colour){
-    switch (colour) {
+void SendWidget::penColour(int colour) {
+  switch (colour) {
     case 0:
-        pColour = Qt::black;
-        break;
+      pColour = Qt::black;
+      break;
     case 1:
-        pColour = Qt::red;
-        break;
+      pColour = Qt::red;
+      break;
     case 2:
-        pColour = Qt::green;
-        break;
+      pColour = Qt::green;
+      break;
     case 3:
-        pColour = Qt::blue;
-        break;
+      pColour = Qt::blue;
+      break;
     case 4:
-        pColour = Qt::cyan;
-        break;
+      pColour = Qt::cyan;
+      break;
     case 5:
-        pColour = Qt::magenta;
-        break;
+      pColour = Qt::magenta;
+      break;
     case 6:
-        pColour = Qt::yellow;
-        break;
+      pColour = Qt::yellow;
+      break;
     case 7:
-        pColour = QColorDialog::getColor(pColour, this);
-        break;
+      pColour = QColorDialog::getColor(pColour, this);
+      break;
     default:
-        pColour = Qt::black;
-        break;
-    }
+      pColour = Qt::black;
+      break;
+  }
 }

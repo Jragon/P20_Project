@@ -16,6 +16,7 @@ class SendWidget : public QWidget {
   void clearScreen();
   void penColour(int colour);
   void penWidth(int width);
+  void sendImage();
 
  private:
   QVector<QPointF> mPoints;
@@ -24,7 +25,6 @@ class SendWidget : public QWidget {
   int pWidth;
 
   void updateImage();
-  void sendImage();
 
  protected:
   void paintEvent(QPaintEvent *e);
