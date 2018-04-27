@@ -7,7 +7,7 @@
 class ReceiveWidget : public QWidget {
   Q_OBJECT
  public:
-  explicit ReceiveWidget(QWidget *parent = nullptr);
+  explicit ReceiveWidget(QWidget *parent = 0);
 
  signals:
 

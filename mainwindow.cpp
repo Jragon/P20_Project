@@ -8,8 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
   //          &ReceiveWidget::receive);
   connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget,
           &SendWidget::clearScreen);
-  connect(ui->colourInput, QOverload<int>::of(&QComboBox::activated), ui->sendWidget, &SendWidget::penColour);
-  connect(ui->sizeInput, QOverload<int>::of(&QSpinBox::valueChanged), ui->sendWidget, &SendWidget::penWidth);
+  connect(ui->colourInput, static_cast<void (QComboBox::*)(int)>(&QComboBox::activated), ui->sendWidget, &SendWidget::penColour);
+  connect(ui->sizeInput, static_cast<void (QSpinBox::*)(int)>(&QSpinBox::valueChanged), ui->sendWidget, &SendWidget::penWidth);
 
   sendWorker = new SendWorker;
   sendWorker->moveToThread(&sendThread);

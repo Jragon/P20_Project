@@ -7,7 +7,7 @@
 class SendWidget : public QWidget {
   Q_OBJECT
  public:
-  explicit SendWidget(QWidget *parent = nullptr);
+  explicit SendWidget(QWidget *parent = 0);
 
  signals:
   void send(package_t pkg);

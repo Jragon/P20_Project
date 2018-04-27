@@ -8,7 +8,7 @@
 class SendWorker : public QObject {
   Q_OBJECT
  public:
-  explicit SendWorker(QObject *parent = nullptr);
+  explicit SendWorker(QObject *parent = 0);
 
  signals:
 
@@ -22,7 +22,7 @@ class SendWorker : public QObject {
 class RecvWorker : public QObject {
   Q_OBJECT
  public:
-  explicit RecvWorker(QObject *parent = nullptr);
+  explicit RecvWorker(QObject *parent = 0);
 
  signals:
   void received(package_t pkg);
