@@ -5,6 +5,8 @@ MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent), ui(new Ui::MainWindow) {
   ui->setupUi(this);
 
+  setupWiringPi();
+
   // idk need to work on the actual position of the recv widget
   // for somereason this->x() doesn't return the x pos of
   // mainwindow. Maybe it's because mainwindow has been constructed?
@@ -59,9 +61,32 @@ MainWindow::~MainWindow() {
 
   delete ui;
   delete recvWidget;
+
+  QApplication::quit();
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
   recvWidget->hide();
   event->accept();
+}
+
+void MainWindow::setupWiringPi() {
+  wiringPiSetup();
+
+  // send
+  pinMode(package_t::txSyncOut, OUTPUT);  // tx sync  - out
+  pinMode(package_t::rxSyncIn, INPUT);    // rx sync  - in
+  pinMode(package_t::cmdSyncOut, OUTPUT); // cmd sync - out
+  pinMode(package_t::dataOut, OUTPUT);    // data     - out
+
+  // receive
+  pinMode(package_t::txSyncIn, INPUT);
+  pinMode(package_t::rxSyncOut, OUTPUT);
+  pinMode(package_t::cmdSyncIn, INPUT);
+  pinMode(package_t::dataIn, INPUT);
+
+  digitalWrite(package_t::txSyncOut, 0);
+  digitalWrite(package_t::rxSyncOut, 0);
+  digitalWrite(package_t::cmdSyncOut, 0);
+  digitalWrite(package_t::dataOut, 0);
 }

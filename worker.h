@@ -1,39 +1,42 @@
 #ifndef SENDWORKER_H
 #define SENDWORKER_H
 
+#include "package.h"
 #include <QObject>
 #include <QThread>
-#include "package.h"
+#include <wiringPi.h>
 
 class SendWorker : public QObject {
   Q_OBJECT
- public:
+public:
   explicit SendWorker(QObject *parent = 0);
 
- signals:
+signals:
 
- public slots:
+public slots:
   void sendPackage(package_t pkg);
 
- private:
+private:
+  void writeSimByte(quint8 byte);
   void writeByte(quint8 byte);
 };
 
 class RecvWorker : public QObject {
   Q_OBJECT
- public:
+public:
   explicit RecvWorker(QObject *parent = 0);
 
- signals:
+signals:
   void received(package_t pkg);
 
- public slots:
+public slots:
   void loop();
   void quit() { exitFlag = true; }
 
- private:
+private:
+  quint8 readSimByte();
   quint8 readByte();
   bool exitFlag;
 };
 
-#endif  // SENDWORKER_H
+#endif // SENDWORKER_H

@@ -39,3 +39,5 @@ HEADERS += \
 
 FORMS += \
         mainwindow.ui
+
+LIBS += -L/usr/local/include -lwiringPi

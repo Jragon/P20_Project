@@ -84,32 +84,32 @@ void SendWidget::penWidth(int width) { pWidth = width; }
 
 void SendWidget::penColour(int colour) {
   switch (colour) {
-    case 0:
-      pColour = Qt::black;
-      break;
-    case 1:
-      pColour = Qt::red;
-      break;
-    case 2:
-      pColour = Qt::green;
-      break;
-    case 3:
-      pColour = Qt::blue;
-      break;
-    case 4:
-      pColour = Qt::cyan;
-      break;
-    case 5:
-      pColour = Qt::magenta;
-      break;
-    case 6:
-      pColour = Qt::yellow;
-      break;
-    case 7:
-      pColour = QColorDialog::getColor(pColour, this);
-      break;
-    default:
-      pColour = Qt::black;
-      break;
+  case 0:
+    pColour = Qt::black;
+    break;
+  case 1:
+    pColour = Qt::red;
+    break;
+  case 2:
+    pColour = Qt::green;
+    break;
+  case 3:
+    pColour = Qt::blue;
+    break;
+  case 4:
+    pColour = Qt::cyan;
+    break;
+  case 5:
+    pColour = Qt::magenta;
+    break;
+  case 6:
+    pColour = Qt::yellow;
+    break;
+  case 7:
+    pColour = QColorDialog::getColor(pColour, this);
+    break;
+  default:
+    pColour = Qt::black;
+    break;
   }
 }

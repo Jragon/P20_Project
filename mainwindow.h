@@ -1,12 +1,15 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "receivewidget.h"
+#include "wiringPi.h"
+#include "worker.h"
+#include <QApplication>
 #include <QCloseEvent>
 #include <QDesktopWidget>
 #include <QMainWindow>
 #include <QThread>
-#include "receivewidget.h"
-#include "worker.h"
+
 
 namespace Ui {
 class MainWindow;
@@ -15,21 +18,24 @@ class MainWindow;
 class MainWindow : public QMainWindow {
   Q_OBJECT
 
- public:
+public:
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
- signals:
+
+signals:
   void deconstructing();
 
- protected:
+protected:
   void closeEvent(QCloseEvent *event);
 
- private:
+private:
   Ui::MainWindow *ui;
   ReceiveWidget *recvWidget;
   QThread sendThread, recvThread;
   RecvWorker *recvWorker;
   SendWorker *sendWorker;
+
+  void setupWiringPi();
 };
 
-#endif  // MAINWINDOW_H
+#endif // MAINWINDOW_H

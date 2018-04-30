@@ -12,9 +12,11 @@ SendWorker::SendWorker(QObject *parent) : QObject(parent) {}
 
 void SendWorker::sendPackage(package_t pkg) {
   QThread::currentThread()->usleep(500);
-  rxSim.cmdSync = 1;
+
+  digitalWrite(package_t::cmdSyncOut, 1);
   writeByte(pkg.cmd);
-  rxSim.cmdSync = 0;
+  digitalWrite(package_t::cmdSyncOut, 0);
+
   writeByte(pkg.data.size() >> 8);
   writeByte(pkg.data.size());
   for (int i = 0; i < pkg.data.size(); i++) {
@@ -23,6 +25,36 @@ void SendWorker::sendPackage(package_t pkg) {
 }
 
 void SendWorker::writeByte(quint8 byte) {
+  for (int i = 0; i < 8; i++) {
+    qDebug() << "Write: Start Write Bit";
+
+    // wait for rxSync to go low
+    qDebug() << "Write: wait for rxSync to go low";
+
+    while (digitalRead(package_t::rxSyncIn))
+      ;
+
+    // put bit on line
+    qDebug() << "Write: Put bit on line";
+    digitalWrite(package_t::dataOut, byte & 0x80);
+    byte <<= 1;
+
+    qDebug() << "Write: Put txSync high";
+    digitalWrite(package_t::txSyncOut, 1);
+
+    // wait for rxSync to go high
+    qDebug() << "Write: Wait rxsync low";
+    while (!digitalRead(package_t::rxSyncIn))
+      ;
+
+    qDebug() << "Write: txSync low";
+    digitalWrite(package_t::txSyncOut, 0);
+
+    qDebug() << "Write: End Write Bit";
+  }
+}
+
+void SendWorker::writeSimByte(quint8 byte) {
   for (int i = 0; i < 8; i++) {
     // wait for rxSync to go low
     while (rxSim.rxSync)
@@ -45,15 +77,13 @@ void SendWorker::writeByte(quint8 byte) {
 RecvWorker::RecvWorker(QObject *parent) : QObject(parent), exitFlag(false) {}
 
 void RecvWorker::loop() {
-  rxSim.rxSync = false;
-  rxSim.txSync = false;
+  digitalWrite(package_t::rxSyncOut, 0);
 
   while (!exitFlag) {
-    if (rxSim.cmdSync) {
+    if (digitalRead(package_t::cmdSyncIn)) {
       package_t pkg;
 
       pkg.cmd = readByte();
-
       int size = readByte() << 8;
       size |= readByte();
       for (int i = 0; i < size; i++) {
@@ -65,7 +95,36 @@ void RecvWorker::loop() {
   }
 }
 
+quint8 RecvWorker::readSimByte() {
+  quint8 data = 0;
+  /*
+  for 8 bits:
+    wait txSync high
+    read bit
+    rxSync high       // transmit uses rxSync to send next bit
+    wait txSync low   // when rxSync goes high next bit will be sent
+    rxSync low
+  */
+
+  for (int i = 0; i < 8; i++) {
+
+    while (!rxSim.txSync)
+      ;
+    qDebug() << "Read [" << i << "]: read data";
+    data |= (rxSim.data << (7 - i));
+    qDebug() << "Read [" << i << "]: set rxSync High";
+    rxSim.rxSync = 1;
+    qDebug() << "Read [" << i << "]: wait txSync low";
+    while (rxSim.txSync)
+      ;
+    qDebug() << "Read [" << i << "]: rxSync low";
+    rxSim.rxSync = 0;
+  }
+  return data;
+}
+
 quint8 RecvWorker::readByte() {
+  qDebug() << "Read: Start read byte";
   quint8 data = 0;
   /*
   for 8 bits:
@@ -76,13 +135,20 @@ quint8 RecvWorker::readByte() {
     rxSync low
   */
   for (int i = 0; i < 8; i++) {
-    while (!rxSim.txSync)
+    qDebug() << "Read [" << i << "]: start";
+    qDebug() << "Read [" << i << "]: wait txSync go high";
+    while (!digitalRead(package_t::txSyncIn))
       ;
-    data |= (rxSim.data << (7 - i));
-    rxSim.rxSync = 1;
-    while (rxSim.txSync)
+    qDebug() << "Read [" << i << "]: read data";
+    data |= (digitalRead(package_t::dataIn) << (7 - i));
+    qDebug() << "Read [" << i << "]: set rxSync High";
+    digitalWrite(package_t::rxSyncOut, 1);
+    qDebug() << "Read [" << i << "]: wait txSync low";
+    while (digitalRead(package_t::txSyncIn))
       ;
-    rxSim.rxSync = 0;
+    qDebug() << "Read [" << i << "]: rxSync low";
+    digitalWrite(package_t::rxSyncOut, 0);
+    qDebug() << "Read [" << i << "]: end";
   }
   return data;
 }
