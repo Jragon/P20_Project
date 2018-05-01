@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
   recvThread.start();
 
   // send initial white image to set width
-  ui->sendWidget->sendImage();
+  //ui->sendWidget->sendImage();
 }
 
 MainWindow::~MainWindow() {

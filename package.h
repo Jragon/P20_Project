@@ -2,6 +2,7 @@
 #define PACKAGE_H
 
 #include <QByteArray>
+#include <QMetaType>
 
 typedef struct {
   enum Commands { Clear = 0, Resize, Point, Image };
