@@ -5,6 +5,7 @@
 #include <QObject>
 #include <QThread>
 #include <QElapsedTimer>
+#include <QCryptographicHash>
 #include <wiringPi.h>
 
 class SendWorker : public QObject {

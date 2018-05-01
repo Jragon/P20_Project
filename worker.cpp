@@ -24,6 +24,11 @@ void SendWorker::sendPackage(package_t pkg) {
     writeByte(pkg.data.at(i));
   }
 
+  QByteArray hash = QCryptographicHash::hash(pkg.data, QCryptographicHash::Md5);
+  for (int i = 0; i < hash.size(); i++) {
+    writeByte(hash.at(i));
+  }
+
   int elapsed = timer.elapsed();
   qDebug() << "PKG OUT: " << pkg.data.size() << "bytes in " << elapsed/1000.0
            << "s | avg: " << (pkg.data.size())/(elapsed/1000.0) << "Bytes per second";
@@ -96,6 +101,17 @@ void RecvWorker::loop() {
       for (int i = 0; i < size; i++) {
         pkg.data.append(readByte());
       }
+
+      QByteArray localHash = QCryptographicHash::hash(pkg.data, QCryptographicHash::Md5);
+      QByteArray remoteHash;
+
+      // receive 32 byte md5 checksum
+      for (int i = 0; i < localHash.size(); i++) {
+        remoteHash.append(readByte());
+      }
+
+      if (localHash != remoteHash)
+          qDebug() << "Checksums do not match";
 
       emit received(pkg);
 
