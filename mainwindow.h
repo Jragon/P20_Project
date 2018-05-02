@@ -34,6 +34,9 @@ private:
   QThread sendThread, recvThread;
   RecvWorker *recvWorker;
   SendWorker *sendWorker;
+  QMenu *fileMenu;
+  QAction *openAct;
+  QAction *saveAct;
 
   void setupWiringPi();
 };

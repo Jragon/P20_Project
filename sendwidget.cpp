@@ -80,6 +80,13 @@ void SendWidget::clearScreen() {
   sendImage();
 }
 
+void SendWidget::fillScreen() {
+  mPoints.clear();
+  image.fill(pColour);
+  updateImage();
+  sendImage();
+}
+
 void SendWidget::penWidth(int width) { pWidth = width; }
 
 void SendWidget::penColour(int colour) {
@@ -111,5 +118,35 @@ void SendWidget::penColour(int colour) {
   default:
     pColour = Qt::black;
     break;
+  }
+}
+
+
+void SendWidget::openImg(){
+  QString filename = QFileDialog::getOpenFileName(this, "Open Image");
+  if(filename != 0){
+  mPoints.clear();
+  image.load(filename);
+  QSize newSize = image.size();
+  if(newSize.width() < 530){
+    newSize.setWidth(530);
+  }
+  if(newSize.height() < 350){
+    newSize.setHeight(350);
+  }
+  QImage newImage(newSize, QImage::Format_RGB32);
+  newImage.fill(Qt::white);
+  QPainter painter(&newImage);
+  painter.drawImage(0, 0, image);
+  image = newImage;
+  this->update();
+  sendImage();
+  }
+}
+
+void SendWidget::saveImg(){
+  QString filename = QFileDialog::getSaveFileName(this, "Save Image");
+  if(filename != 0){
+  image.save(filename, 0, -1);
   }
 }

@@ -7,6 +7,10 @@ MainWindow::MainWindow(QWidget *parent)
 
   setupWiringPi();
 
+  //Window had issues if an image was loaded that was smaller than the current window would allow
+  this->setMinimumWidth(550);
+  this->setMinimumHeight(400);
+
   // idk need to work on the actual position of the recv widget
   // for somereason this->x() doesn't return the x pos of
   // mainwindow. Maybe it's because mainwindow has been constructed?
@@ -21,8 +25,15 @@ MainWindow::MainWindow(QWidget *parent)
   recvWidget->move(x, y);
   recvWidget->show();
 
+  connect(ui->actionOpen, &QAction::triggered, ui->sendWidget,
+          &SendWidget::openImg);
+  connect(ui->actionSave, &QAction::triggered, ui->sendWidget,
+          &SendWidget::saveImg);
+
   connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget,
           &SendWidget::clearScreen);
+  connect(ui->fillButton, &QPushButton::pressed, ui->sendWidget,
+          &SendWidget::fillScreen);
   connect(ui->colourInput,
           static_cast<void (QComboBox::*)(int)>(&QComboBox::activated),
           ui->sendWidget, &SendWidget::penColour);

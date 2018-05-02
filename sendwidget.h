@@ -2,6 +2,7 @@
 #define SENDWIDGET_H
 
 #include <QWidget>
+#include <QFileDialog>
 #include "package.h"
 
 class SendWidget : public QWidget {
@@ -14,9 +15,12 @@ class SendWidget : public QWidget {
 
  public slots:
   void clearScreen();
+  void fillScreen();
   void penColour(int colour);
   void penWidth(int width);
   void sendImage();
+  void openImg();
+  void saveImg();
 
  private:
   QVector<QPointF> mPoints;
