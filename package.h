@@ -10,11 +10,17 @@ typedef struct {
     txSyncOut = 0,
     rxSyncIn = 1,
     cmdSyncOut = 2,
-    dataOut = 3,
     txSyncIn = 10,
     rxSyncOut = 11,
     cmdSyncIn = 12,
-    dataIn = 13
+    dataOut1 = 22,
+    dataOut2 = 23,
+    dataOut3 = 24,
+    dataOut4 = 25,
+    dataIn1 = 26,
+    dataIn2 = 27,
+    dataIn3 = 28,
+    dataIn4 = 29
   };
   quint8 cmd;
   QByteArray data;

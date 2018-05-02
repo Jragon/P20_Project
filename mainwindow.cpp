@@ -77,16 +77,25 @@ void MainWindow::setupWiringPi() {
   pinMode(package_t::txSyncOut, OUTPUT);  // tx sync  - out
   pinMode(package_t::rxSyncIn, INPUT);    // rx sync  - in
   pinMode(package_t::cmdSyncOut, OUTPUT); // cmd sync - out
-  pinMode(package_t::dataOut, OUTPUT);    // data     - out
+  pinMode(package_t::dataOut1, OUTPUT);    // data 1    - out
+  pinMode(package_t::dataOut2, OUTPUT);    // data 2    - out
+  pinMode(package_t::dataOut3, OUTPUT);    // data 3    - out
+  pinMode(package_t::dataOut4, OUTPUT);    // data 4    - out
 
   // receive
   pinMode(package_t::txSyncIn, INPUT);
   pinMode(package_t::rxSyncOut, OUTPUT);
   pinMode(package_t::cmdSyncIn, INPUT);
-  pinMode(package_t::dataIn, INPUT);
+  pinMode(package_t::dataIn1, INPUT);
+  pinMode(package_t::dataIn2, INPUT);
+  pinMode(package_t::dataIn3, INPUT);
+  pinMode(package_t::dataIn4, INPUT);
 
   digitalWrite(package_t::txSyncOut, 0);
   digitalWrite(package_t::rxSyncOut, 0);
   digitalWrite(package_t::cmdSyncOut, 0);
-  digitalWrite(package_t::dataOut, 0);
+  digitalWrite(package_t::dataOut1, 0);
+  digitalWrite(package_t::dataOut2, 0);
+  digitalWrite(package_t::dataOut3, 0);
+  digitalWrite(package_t::dataOut4, 0);
 }

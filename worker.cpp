@@ -35,7 +35,7 @@ void SendWorker::sendPackage(package_t pkg) {
 }
 
 void SendWorker::writeByte(quint8 byte) {
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 2; i++) {
     // qDebug() << "Write: Start Write Bit";
 
     // wait for rxSync to go low
@@ -46,7 +46,13 @@ void SendWorker::writeByte(quint8 byte) {
 
     // put bit on line
     // qDebug() << "Write: Put bit on line";
-    digitalWrite(package_t::dataOut, byte & 0x80);
+    digitalWrite(package_t::dataOut1, byte & 0x80);
+    byte <<= 1;
+    digitalWrite(package_t::dataOut2, byte & 0x80);
+    byte <<= 1;
+    digitalWrite(package_t::dataOut3, byte & 0x80);
+    byte <<= 1;
+    digitalWrite(package_t::dataOut4, byte & 0x80);
     byte <<= 1;
 
     // qDebug() << "Write: Put txSync high";
@@ -161,13 +167,16 @@ quint8 RecvWorker::readByte() {
     wait txSync low   // when rxSync goes high next bit will be sent
     rxSync low
   */
-  for (int i = 0; i < 8; i++) {
+  for (int i = 0; i < 2; i++) {
     // qDebug() << "Read [" << i << "]: start";
     // qDebug() << "Read [" << i << "]: wait txSync go high";
     while (!digitalRead(package_t::txSyncIn))
       ;
     // qDebug() << "Read [" << i << "]: read data";
-    data |= (digitalRead(package_t::dataIn) << (7 - i));
+    data |= (digitalRead(package_t::dataIn1) << (7 - (4 * i)));
+    data |= (digitalRead(package_t::dataIn2) << (6 - (4 * i)));
+    data |= (digitalRead(package_t::dataIn3) << (5 - (4 * i)));
+    data |= (digitalRead(package_t::dataIn4) << (4 - (4 * i)));
     // qDebug() << "Read [" << i << "]: set rxSync High";
     digitalWrite(package_t::rxSyncOut, 1);
     // qDebug() << "Read [" << i << "]: wait txSync low";
