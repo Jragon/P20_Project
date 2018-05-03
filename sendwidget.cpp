@@ -6,7 +6,7 @@
 #include <QPainter>
 #include <QStyleOption>
 
-SendWidget::SendWidget(QWidget *parent) : QWidget(parent) {
+SendWidget::SendWidget(QWidget *parent) : QWidget(parent), count(0), sendRate(250) {
   pColour = Qt::black;
   pWidth = 1;
 }
@@ -27,6 +27,11 @@ void SendWidget::mousePressEvent(QMouseEvent *e) {
 }
 
 void SendWidget::mouseMoveEvent(QMouseEvent *e) {
+  count++;
+  if(count > sendRate){
+      count = 0;
+      sendImage();
+  }
   mPoints.append(e->localPos());
   updateImage();
 }
@@ -149,4 +154,8 @@ void SendWidget::saveImg(){
   if(filename != 0){
   image.save(filename, 0, -1);
   }
+}
+
+void SendWidget::setSendRate(int newRate){
+    sendRate = newRate;
 }

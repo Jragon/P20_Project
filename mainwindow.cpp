@@ -2,7 +2,10 @@
 #include "ui_mainwindow.h"
 
 MainWindow::MainWindow(QWidget *parent)
-    : QMainWindow(parent), ui(new Ui::MainWindow) {
+    : QMainWindow(parent), ui(new Ui::MainWindow), rateOut(0), rateIn(0),
+      sizeOut(0), sizeIn(0),
+      avgRate(10),
+      countOut(0), countIn(0) {
   ui->setupUi(this);
 
   setupWiringPi();
@@ -29,6 +32,11 @@ MainWindow::MainWindow(QWidget *parent)
           &SendWidget::openImg);
   connect(ui->actionSave, &QAction::triggered, ui->sendWidget,
           &SendWidget::saveImg);
+  connect(ui->sendRateSlider, &QSlider::valueChanged, ui->sendWidget, &SendWidget::setSendRate);
+
+  connect(ui->sendRateSlider, &QSlider::valueChanged, [=](const int &newValue){
+      ui->sendRateValue->setText(QString::number(newValue));
+  });
 
   connect(ui->clearButton, &QPushButton::pressed, ui->sendWidget,
           &SendWidget::clearScreen);
@@ -53,6 +61,9 @@ MainWindow::MainWindow(QWidget *parent)
   connect(&recvThread, &QThread::started, recvWorker, &RecvWorker::loop);
   connect(recvWorker, &RecvWorker::received, recvWidget,
           &ReceiveWidget::receive);
+
+  connect(sendWorker, &SendWorker::sendSuccess, this, &MainWindow::updateSendData);
+  connect(recvWorker, &RecvWorker::receiveSuccess, this, &MainWindow::updateRecvData);
 
   sendThread.start();
   recvThread.start();
@@ -118,3 +129,24 @@ void MainWindow::setupWiringPi() {
   digitalWrite(package_t::dataOut3, 0);
   digitalWrite(package_t::dataOut4, 0);
 }
+
+void MainWindow::updateSendData(int elapsed, int size){
+  countOut++;
+  rateOut -= rateOut / avgRate;
+  rateOut += (size / (elapsed / 1000.0)) / avgRate;
+  sizeOut -= sizeOut / avgRate;
+  sizeOut += size / avgRate;
+  ui->sendSizeLabel->setText(QString::number(sizeOut) + " bytes");
+  ui->sendRateLabel->setText(QString::number((rateOut / 1000.0)) + " kBps");
+}
+
+void MainWindow::updateRecvData(int elapsed, int size){
+  countIn++;
+  rateIn -= rateIn / avgRate;
+  rateIn += (size / (elapsed / 1000.0)) / avgRate;
+  sizeIn -= sizeIn / avgRate;
+  sizeIn += size / avgRate;
+  ui->recvSizeLabel->setText(QString::number(sizeIn) + " bytes");
+  ui->recvRateLabel->setText(QString::number((rateIn / 1000.0)) + " kBps");
+}
+

@@ -9,6 +9,7 @@
 #include <QDesktopWidget>
 #include <QMainWindow>
 #include <QThread>
+#include <QDebug>
 
 
 namespace Ui {
@@ -25,6 +26,10 @@ public:
 signals:
   void deconstructing();
 
+public slots:
+  void updateSendData(int elapsed, int size);
+  void updateRecvData(int elapsed, int size);
+
 protected:
   void closeEvent(QCloseEvent *event);
 
@@ -37,6 +42,10 @@ private:
   QMenu *fileMenu;
   QAction *openAct;
   QAction *saveAct;
+  double rateOut, rateIn;
+  int sizeOut, sizeIn;
+  int avgRate;
+  int countOut, countIn;
 
   void setupWiringPi();
 };

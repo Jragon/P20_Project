@@ -32,6 +32,8 @@ void SendWorker::sendPackage(package_t pkg) {
   int elapsed = timer.elapsed();
   qDebug() << "PKG OUT: " << pkg.data.size() << "bytes in " << elapsed/1000.0
            << "s | avg: " << (pkg.data.size())/(elapsed/1000.0) << "Bytes per second";
+
+  emit sendSuccess(elapsed, pkg.data.size());
 }
 
 void SendWorker::writeByte(quint8 byte) {
@@ -130,6 +132,7 @@ void RecvWorker::loop() {
       int elapsed = timer.elapsed();
       qDebug() << "PKG IN: " << pkg.data.size() << "bytes in " << elapsed/1000.0
                << "s | avg: " << (pkg.data.size())/(elapsed/1000.0) << "Bytes per second";
+      emit receiveSuccess(elapsed, pkg.data.size());
     }
   }
 }

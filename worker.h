@@ -14,6 +14,7 @@ public:
   explicit SendWorker(QObject *parent = 0);
 
 signals:
+  void sendSuccess(int elapsed, int size);
 
 public slots:
   void sendPackage(package_t pkg);
@@ -30,6 +31,7 @@ public:
 
 signals:
   void received(package_t pkg);
+  void receiveSuccess(int elapsed, int size);
 
 public slots:
   void loop();

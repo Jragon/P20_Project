@@ -21,13 +21,15 @@ class SendWidget : public QWidget {
   void sendImage();
   void openImg();
   void saveImg();
+  void setSendRate(int newRate);
 
  private:
   QVector<QPointF> mPoints;
   QImage image;
   QColor pColour;
   int pWidth;
-
+  int count;
+  int sendRate;
   void updateImage();
 
  protected:
