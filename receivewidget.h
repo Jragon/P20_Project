@@ -13,6 +13,7 @@ class ReceiveWidget : public QWidget {
 
  public slots:
   void receive(package_t pkg);
+  void saveImg();
 
  private:
   QImage image;

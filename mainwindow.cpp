@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
           &SendWidget::openImg);
   connect(ui->actionSave, &QAction::triggered, ui->sendWidget,
           &SendWidget::saveImg);
+  connect(ui->actionSave_Received, &QAction::triggered, recvWidget,
+          &ReceiveWidget::saveImg);
+
   connect(ui->sendRateSlider, &QSlider::valueChanged, ui->sendWidget, &SendWidget::setSendRate);
 
   connect(ui->sendRateSlider, &QSlider::valueChanged, [=](const int &newValue){
@@ -149,4 +152,3 @@ void MainWindow::updateRecvData(int elapsed, int size){
   ui->recvSizeLabel->setText(QString::number(sizeIn) + " bytes");
   ui->recvRateLabel->setText(QString::number((rateIn / 1000.0)) + " kBps");
 }
-

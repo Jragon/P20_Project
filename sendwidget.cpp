@@ -61,12 +61,6 @@ void SendWidget::sendImage() {
   emit send(pkg);
 }
 
-// void SendWidget::addPoint(QPointF point) {
-//  package_t pkg;
-//  pkg.cmd = package_t::Point;
-//  pkg.data.appen emit send(pkg);
-//}
-
 void SendWidget::resizeEvent(QResizeEvent *e) {
   QImage newImage(e->size(), QImage::Format_RGB32);
   newImage.fill(Qt::white);
@@ -136,8 +130,8 @@ void SendWidget::openImg(){
   if(newSize.width() < 530){
     newSize.setWidth(530);
   }
-  if(newSize.height() < 350){
-    newSize.setHeight(350);
+  if(newSize.height() < 300){
+    newSize.setHeight(300);
   }
   QImage newImage(newSize, QImage::Format_RGB32);
   newImage.fill(Qt::white);
@@ -150,7 +144,7 @@ void SendWidget::openImg(){
 }
 
 void SendWidget::saveImg(){
-  QString filename = QFileDialog::getSaveFileName(this, "Save Image");
+  QString filename = QFileDialog::getSaveFileName(this, tr("Save Image"));
   if(filename != 0){
   image.save(filename, 0, -1);
   }
